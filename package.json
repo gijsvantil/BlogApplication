@@ -15,5 +15,6 @@
   "bugs": {
     "url": "https://github.com/gijsvantil/BlogApplication/issues"
   },
-  "homepage": "https://github.com/gijsvantil/BlogApplication#readme"
+  "homepage": "https://github.com/gijsvantil/BlogApplication#readme",
+  "dependencies": {}
 }
