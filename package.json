@@ -16,5 +16,10 @@
     "url": "https://github.com/gijsvantil/BlogApplication/issues"
   },
   "homepage": "https://github.com/gijsvantil/BlogApplication#readme",
-  "dependencies": {}
+  "dependencies": {
+    "body-parser": "^1.15.1",
+    "express": "^4.13.4",
+    "pug": "^2.0.0-alpha8",
+    "sequelize": "^3.23.3"
+  }
 }
