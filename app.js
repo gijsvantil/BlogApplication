@@ -48,7 +48,12 @@ sequelize.sync({force:true}).then(function(){
 		firstname: "Gijs",
 		lastname: "van Til",
 		email: "gijsvantil@gmail.com"
-	}).then(function(){
+	}).then(blogPost.create({
+		title: "Hoi",
+		body: "Hello World"
+	})).then(Comment.create({
+		body: "HIDIPIADS"
+	})).then(function(){
 		var server= app.listen(3000, function(){
 			console.log ('Blog Application listening on port: ' + server.address().port)
 		})
