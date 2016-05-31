@@ -8,18 +8,19 @@ html
 		if user
 			meta(http-equiv='refresh', content='0; url=posts')
 		else
-			div#container
-				div#row
-					div#col-sm-12
-						div#centerBlock
-							h1 LOGIN
-							form(action='login' method='post')
-								label email
-								input#email(name = 'email')
-								label password
-								input#password(name='password')
-								input(type='submit' value='login' id='submit')
-			div#container
+			.container
+				div.row
+					div.col-sm-12
+						h2 Login
+						form(role='form', action='login', method='post')
+							.form-group
+								label Email:
+								input#email.form-control(name = 'email', type='email', placeholder='Enter email')
+							.form-group
+								label Password:
+								input#pwd.form-control(name ='password', type='password', placeholder='Enter password')
+								button.btn.btn-default(type='submit', value = 'login') Login
+			div#container.text-center
 				div#row
 					div#col-sm-12
 						h3 Don't have an account yet? Register 
