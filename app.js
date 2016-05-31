@@ -53,12 +53,18 @@ app.use(session({
 app.set('views', './views');
 app.set('view engine', 'pug');
 
-// Simple get that listens on '/' and renders 'index'
+// First GET: listens on '/' and renders 'index'
 // This renders the login page
 app.get('/', (req,res)=>{
 	res.render('index')
 });
 
+// Second GET: listens on 'register' and renders 'register'
+app.get('/register', (req,res)=>{
+	res.render('register')
+});
+
+// Second GET: listens on '/allposts' and renders a page with all blog posts
 app.get('/allposts', (req,res)=>{
 	var user = req.session.user;
 	if (user === undefined){
@@ -67,6 +73,26 @@ app.get('/allposts', (req,res)=>{
 		res.render('posts')
 	}
 })
+
+
+
+//Second POST
+app.post('login', bodyParser.urlencoded({extended:true}), function(req,res){
+	if (req.body.username.length === 0){
+		res.redirect('/?message=' + encodeURIComponent("Please fill out your email address."));
+		return;
+	}
+
+	if (req.body.password.length === 0){
+		res.redirect('/?message=' + encodeURIComponent("Please fill out your password."));
+		return;
+	}
+	User.findOne({
+		where: {
+			user: reqb
+		}
+	})
+});
 
 sequelize.sync({force: true}).then(function () {
 	User.create({
