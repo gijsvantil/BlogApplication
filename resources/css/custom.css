@@ -1,5 +1,27 @@
-#containerlogin{
+body{
+	background-color: F2F2F2;
+}
+
+.container.login{
+	background-color:white;
+	margin-top:10%;
 	border: 1px solid black;
-	width: 30%;
-	height:70%;
+	border-radius:5px;
+	width:500px;
+	height:375px;
+	box-shadow: 10px 10px 5px #888888;
+}
+
+.container.register{
+	background-color:white;
+	margin-top:7%;
+	border: 1px solid black;
+	border-radius:5px;
+	width:500px;
+	height:500px;
+	box-shadow: 10px 10px 5px #888888;
+}
+
+button{
+	margin-top: 5%;
 }

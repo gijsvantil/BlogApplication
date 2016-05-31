@@ -78,7 +78,7 @@ app.get('/allposts', (req,res)=>{
 
 //First POST: listens on '/register' and creates new user in database with information from form
 app.post('/register', function(req,res){
-	sequelize.sync({force: true}).then(function(){
+	sequelize.sync({force: false}).then(function(){
 		User.create({
 			username: req.body.username,
 			firstname: req.body.firstname,
@@ -90,25 +90,35 @@ app.post('/register', function(req,res){
 	res.redirect('/')
 });
 
+// Second POST: listens on /. Handles the login. Checks if username exists and if the password is correct.
+app.post('/login', function(req,res){
+	// making sure user doesn't leave form empty
+	if (req.body.username.length === 0){
+		res.redirect('/?message=' + encodeURIComponent(("Please fill out your username.")));
+		return;
+	}
+	if (req.body.password.length === 0){
+		res.redirect('/?message=' + encodeURIComponent(("Please fill out your password.")));
+		return;
+	}
+	// Check if username corresponds with a username in database
+	User.findOne({
+		where: {
+			username: req.body.username
+		}
+	// Check if password corresponds with password in database
+	}).then(function(user){
+		if (user !== null && req.body.password === user.password){
+		req.session.user = user;
+		res.redirect('allposts');
+		} else {
+			res.redirect('/?message=' + encodeURIComponent("Invalid username or password."));
+		}
+	}, function (error){
+		res.redirect('/?message=' + encodeURIComponent("Invalid username"));
+	})
+});
+
 var server = app.listen(3000, function (){
 			console.log ('Blog Application listening on: ' + server.address().port)
 });
-
-// sequelize.sync({force: true}).then(function () {
-// 	User.create({
-// 		username: "bubbles",
-// 		firstname: "Gijs",
-// 		lastname: "van Til",
-// 		email: "gijsvantil@gmail.com",
-// 		password: "test"
-// 	}).then(function(user) {
-// 		user.createBlogpost({
-// 			title: "hello",
-// 			body: "i like trains"
-// 		});
-// 	}).then(function(){
-// 		var server = app.listen(3000, function (){
-// 			console.log ('Blog Application listening on: ' + server.address().port)
-// 		})
-// 	});
-// });

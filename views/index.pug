@@ -8,14 +8,14 @@ html
 		if user
 			meta(http-equiv='refresh', content='0; url=posts')
 		else
-			.container
+			.container.login
 				div.row
 					div.col-sm-12
 						h2 Login
-						form(role='form', action='login', method='post')
+						form(role='form', action='/login', method='post')
 							.form-group
-								label Email:
-								input#email.form-control(name = 'email', type='email', placeholder='Enter email')
+								label Username:
+								input#username.form-control(name = 'username', type='username', placeholder='Enter username')
 							.form-group
 								label Password:
 								input#pwd.form-control(name ='password', type='password', placeholder='Enter password')
