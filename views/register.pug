@@ -1,0 +1,22 @@
+html
+	body
+		title Blog Application by G. van Til
+		// Stylesheets
+		link(rel='stylesheet' href='css/bootstrap.css')
+		link(rel='stylesheet' href='css/custom.css')
+	head
+			div#container
+				div#row
+					div#col-sm-12
+						div#centerBlock
+							h1 REGISTER
+							form(action='register' method='post')
+								label First Name:
+								input#firstname(name = 'firstname')
+								label Last Name:
+								input#lastname(name = 'lastname')
+								label Email:
+								input#email(name = 'email')
+								label Password:
+								input#password(name='password')
+								input(type='submit' value='login' id='submit')

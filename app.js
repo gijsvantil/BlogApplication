@@ -64,7 +64,7 @@ app.get('/register', (req,res)=>{
 	res.render('register')
 });
 
-// Second GET: listens on '/allposts' and renders a page with all blog posts
+// third GET: listens on '/allposts' and renders a page with all blog posts
 app.get('/allposts', (req,res)=>{
 	var user = req.session.user;
 	if (user === undefined){
@@ -72,9 +72,7 @@ app.get('/allposts', (req,res)=>{
 	} else {
 		res.render('posts')
 	}
-})
-
-
+});
 
 //Second POST
 app.post('login', bodyParser.urlencoded({extended:true}), function(req,res){
