@@ -5,14 +5,17 @@ html
 		link(rel='stylesheet' href='css/bootstrap.css')
 		link(rel='stylesheet' href='css/custom.css')
 	head
-		div#container
-			div#row
-				div#col-sm-12
-					div#centerBlock
-						h1 Hello World!
-						form(action='login' method='post')
-							label email
-							input#email(name = 'email' required)
-							label password
-							input#password(name='password' required)
-							input(type='submit' value='login' id='submit')
+		if user
+			meta(http-equiv='refresh', content='0; url=posts')
+		else
+			div#container
+				div#row
+					div#col-sm-12
+						div#centerBlock
+							h1 Hello World!
+							form(action='login' method='post')
+								label email
+								input#email(name = 'email' required)
+								label password
+								input#password(name='password' required)
+								input(type='submit' value='login' id='submit')

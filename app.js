@@ -42,21 +42,26 @@ var app = express();
 // static folder
 app.use(express.static('./resources/'));
 
-// Setting pug as view engine
-app.set('views', './views');
-app.set('view engine', 'pug');
-
-// Simple get that listens on '/' and renders 'index'
-app.get('/', (req,res)=>{
-	res.render('index')
-});
-
 // Initialize session
 app.use(session({
 	secret: 'oh wow very secret much security',
 	resave: true,
 	saveUninitialized: false
-}))
+}));
+
+// Setting pug as view engine
+app.set('views', './views');
+app.set('view engine', 'pug');
+
+// Simple get that listens on '/' and renders 'index'
+// This renders the login page
+app.get('/', (req,res)=>{
+	res.render('index')
+});
+
+app.get('/allposts', (req,res)=>{
+	res.render('posts')
+})
 
 sequelize.sync({force: true}).then(function () {
 	User.create({
