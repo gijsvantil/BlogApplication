@@ -60,7 +60,12 @@ app.get('/', (req,res)=>{
 });
 
 app.get('/allposts', (req,res)=>{
-	res.render('posts')
+	var user = req.session.user;
+	if (user === undefined){
+		res.redirect('/?message=' + encodeURIComponent("Please log in to view your profile."));
+	} else {
+		res.render('posts')
+	}
 })
 
 sequelize.sync({force: true}).then(function () {
