@@ -5,20 +5,24 @@ html
 		link(rel='stylesheet' href='css/bootstrap.css')
 		link(rel='stylesheet' href='css/custom.css')
 	head
-			div#container
-				div#row
-					div#col-sm-12
-						div#centerBlock
-							h1 REGISTER
-							form(action='register' method='post')
+		.container
+				div.row
+					div.col-sm-12
+						h2 Register
+						form(role='form', action='register', method='post')
+							.form-group
 								label Username:
-								input#username(name = 'username')
+								input#username.form-control(name = 'username')
+							.form-group
 								label First Name:
-								input#firstname(name = 'firstname')
+								input#firstname.form-control(name = 'firstname')
+							.form-group
 								label Last Name:
-								input#lastname(name = 'lastname')
+								input#lastname.form-control(name = 'lastname')
+							.form-group
 								label Email:
-								input#email(name = 'email')
+								input#email.form-control(name = 'email')
+							.form-group
 								label Password:
-								input#password(name='password')
-								input(type='submit' value='login' id='submit')
+								input#password.form-control(name = 'password')
+								button.btn.btn-default(type='submit', value = 'login') Register
