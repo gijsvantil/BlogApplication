@@ -19,7 +19,7 @@ var User = sequelize.define('user', {
 });
 
 // creating blogPost model
-var blogPost = sequelize.define ('blogpost',{
+var Blogpost = sequelize.define ('blogpost',{
 	title: Sequelize.STRING,
 	body: Sequelize.STRING,
 })
@@ -28,6 +28,14 @@ var blogPost = sequelize.define ('blogpost',{
 var Comment = sequelize.define ('comment',{
 	body: Sequelize.STRING
 })
+
+// relate user to many blogposts
+User.hasMany(Blogpost);
+Blogpost.belongsTo(User);
+
+// relate blogpost to many comments
+Blogpost.hasMany(Comment);
+Comment.belongsTo(Blogpost);
 
 var app = express();
 // static folder
@@ -42,20 +50,20 @@ app.get('/', (req,res)=>{
 	res.render('index')
 });
 
-sequelize.sync({force:true}).then(function(){
-	User.create({
-		username: "gijsvantil",
+sequelize.sync({force: true}).then(function () {
+	User.create({ // INSERT INTO "people" ("id","name") VALUES (DEFAULT,'bubbles') RETURNING *;
+		username: "bubbles",
 		firstname: "Gijs",
 		lastname: "van Til",
 		email: "gijsvantil@gmail.com"
-	}).then(blogPost.create({
-		title: "Hoi",
-		body: "Hello World"
-	})).then(Comment.create({
-		body: "HIDIPIADS"
-	})).then(function(){
-		var server= app.listen(3000, function(){
-			console.log ('Blog Application listening on port: ' + server.address().port)
+	}).then(function(user) { // INSERT INTO "messages" ("id","body","personId") VALUES (DEFAULT,'i like trains',1) RETURNING *;
+		user.createBlogpost({
+			title: "hello",
+			body: "i like trains"
+		});
+	}).then(function(){
+		var server = app.listen(3000, function (){
+			console.log ('Blog Application listening on: ' + server.address().port)
 		})
 	});
 });
