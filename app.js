@@ -1,8 +1,33 @@
 // REQUIRING Sequelize, Express and Body-parser
-pvar Sequelize = require('sequelize');
+var Sequelize = require('sequelize');
 var express = require('express');
 var bodyParser = require('body-parser');
 var session = require('express-session');
+
+// Setting up a connection to database: blogapplication'
+var sequelize = new Sequelize ('blogapplication', 'pgadmin', 'pwdaccess',{
+	host: 'localhost',
+	dialect: 'postgres'
+});
+
+// creating user model
+var User = sequelize.define('user', {
+	username: Sequelize.STRING,
+	firstname: Sequelize.STRING,
+	lastname: Sequelize.STRING,
+	email: Sequelize.STRING
+});
+
+// creating blogPost model
+var blogPost = sequelize.define ('blogpost',{
+	title: Sequelize.STRING,
+	body: Sequelize.STRING,
+})
+
+// creating Comment model
+var Comment = sequelize.define ('comment',{
+	body: Sequelize.STRING
+})
 
 var app = express();
 // static folder
@@ -17,7 +42,15 @@ app.get('/', (req,res)=>{
 	res.render('index')
 });
 
-
-var server = app.listen(3000, function(){
-	console.log('Blog Application listening on port: ' + server.address().port)
+sequelize.sync({force:true}).then(function(){
+	User.create({
+		username: "gijsvantil",
+		firstname: "Gijs",
+		lastname: "van Til",
+		email: "gijsvantil@gmail.com"
+	}).then(function(){
+		var server= app.listen(3000, function(){
+			console.log ('Blog Application listening on port: ' + server.address().port)
+		})
+	});
 });
