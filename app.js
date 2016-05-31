@@ -15,7 +15,8 @@ var User = sequelize.define('user', {
 	username: Sequelize.STRING,
 	firstname: Sequelize.STRING,
 	lastname: Sequelize.STRING,
-	email: Sequelize.STRING
+	email: Sequelize.STRING,
+	password: Sequelize.STRING
 });
 
 // creating blogPost model
@@ -24,14 +25,14 @@ var Blogpost = sequelize.define ('blogpost',{
 	body: Sequelize.STRING,
 })
 
+// relate user to many blogposts
+User.hasMany(Blogpost);
+Blogpost.belongsTo(User);
+
 // creating Comment model
 var Comment = sequelize.define ('comment',{
 	body: Sequelize.STRING
 })
-
-// relate user to many blogposts
-User.hasMany(Blogpost);
-Blogpost.belongsTo(User);
 
 // relate blogpost to many comments
 Blogpost.hasMany(Comment);
@@ -50,13 +51,21 @@ app.get('/', (req,res)=>{
 	res.render('index')
 });
 
+// Initialize session
+app.use(session({
+	secret: 'oh wow very secret much security',
+	resave: true,
+	saveUninitialized: false
+}))
+
 sequelize.sync({force: true}).then(function () {
-	User.create({ // INSERT INTO "people" ("id","name") VALUES (DEFAULT,'bubbles') RETURNING *;
+	User.create({
 		username: "bubbles",
 		firstname: "Gijs",
 		lastname: "van Til",
-		email: "gijsvantil@gmail.com"
-	}).then(function(user) { // INSERT INTO "messages" ("id","body","personId") VALUES (DEFAULT,'i like trains',1) RETURNING *;
+		email: "gijsvantil@gmail.com",
+		password: "test"
+	}).then(function(user) {
 		user.createBlogpost({
 			title: "hello",
 			body: "i like trains"
