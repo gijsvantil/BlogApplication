@@ -12,10 +12,15 @@ html
 				div#row
 					div#col-sm-12
 						div#centerBlock
-							h1 Hello World!
+							h1 LOGIN
 							form(action='login' method='post')
 								label email
 								input#email(name = 'email')
 								label password
 								input#password(name='password')
 								input(type='submit' value='login' id='submit')
+			div#container
+				div#row
+					div#col-sm-12
+						h3 Don't have an account yet? Register 
+							a(href='/register') here

@@ -12,11 +12,11 @@ var sequelize = new Sequelize ('blogapplication', 'pgadmin', 'pwdaccess',{
 
 // creating user model
 var User = sequelize.define('user', {
-	username: Sequelize.STRING,
-	firstname: Sequelize.STRING,
-	lastname: Sequelize.STRING,
-	email: Sequelize.STRING,
-	password: Sequelize.STRING
+		username: Sequelize.STRING,
+		firstname: Sequelize.STRING,
+		lastname: Sequelize.STRING,
+		email: Sequelize.STRING,
+		password: Sequelize.STRING
 });
 
 // creating blogPost model
@@ -41,6 +41,8 @@ Comment.belongsTo(Blogpost);
 var app = express();
 // static folder
 app.use(express.static('./resources/'));
+// BodyParser
+app.use(bodyParser.urlencoded({ extended: true }));
 
 // Initialize session
 app.use(session({
@@ -74,39 +76,39 @@ app.get('/allposts', (req,res)=>{
 	}
 });
 
-//Second POST
-app.post('login', bodyParser.urlencoded({extended:true}), function(req,res){
-	if (req.body.username.length === 0){
-		res.redirect('/?message=' + encodeURIComponent("Please fill out your email address."));
-		return;
-	}
-
-	if (req.body.password.length === 0){
-		res.redirect('/?message=' + encodeURIComponent("Please fill out your password."));
-		return;
-	}
-	User.findOne({
-		where: {
-			user: reqb
-		}
-	})
-});
-
-sequelize.sync({force: true}).then(function () {
-	User.create({
-		username: "bubbles",
-		firstname: "Gijs",
-		lastname: "van Til",
-		email: "gijsvantil@gmail.com",
-		password: "test"
-	}).then(function(user) {
-		user.createBlogpost({
-			title: "hello",
-			body: "i like trains"
+//First POST: listens on '/register' and creates new user in database with information from form
+app.post('/register', function(req,res){
+	sequelize.sync({force: true}).then(function(){
+		User.create({
+			username: req.body.username,
+			firstname: req.body.firstname,
+			lastname: req.body.lastname,
+			email: req.body.email,
+			password: req.body.password
 		});
-	}).then(function(){
-		var server = app.listen(3000, function (){
-			console.log ('Blog Application listening on: ' + server.address().port)
-		})
 	});
+	res.redirect('/')
 });
+
+var server = app.listen(3000, function (){
+			console.log ('Blog Application listening on: ' + server.address().port)
+});
+
+// sequelize.sync({force: true}).then(function () {
+// 	User.create({
+// 		username: "bubbles",
+// 		firstname: "Gijs",
+// 		lastname: "van Til",
+// 		email: "gijsvantil@gmail.com",
+// 		password: "test"
+// 	}).then(function(user) {
+// 		user.createBlogpost({
+// 			title: "hello",
+// 			body: "i like trains"
+// 		});
+// 	}).then(function(){
+// 		var server = app.listen(3000, function (){
+// 			console.log ('Blog Application listening on: ' + server.address().port)
+// 		})
+// 	});
+// });
