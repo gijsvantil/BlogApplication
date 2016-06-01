@@ -1,15 +1,7 @@
-html
-	head
-		title Blog Application by G. van Til
-		// Stylesheets
-		link(rel='stylesheet' href='css/bootstrap.css')
-		link(rel='stylesheet' href='css/custom.css')
-	body
-		nav.navbar.navbar-default
-			.container-fluid
-				.navbar-header
-					a.navbar-brand(href='#') BLOG APPLICATION
-				ul.nav.navbar-nav
-					li
-						a(href='/') LOGIN
-		h1 You've succesfully logged out
+extends layout
+
+block content
+	.container.text-center
+		.row
+			.col-sm-12
+				h1 You've succesfully logged out

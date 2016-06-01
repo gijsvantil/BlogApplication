@@ -110,7 +110,7 @@ app.post('/login', (req,res)=>{
 	}).then(function(user){
 		if (user !== null && req.body.password === user.password){
 		req.session.user = user;
-		res.redirect('/posts');
+		res.redirect('/allposts');
 		} else {
 			res.redirect('/?message=' + encodeURIComponent("Invalid username or password."));
 		}
