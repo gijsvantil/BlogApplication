@@ -76,6 +76,18 @@ app.get('/allposts', (req,res)=>{
 	}
 });
 
+// fourth GET: listens on 'newpost' and renders a page with a form to add a new page
+app.get('/newpost', (req,res)=>{
+	var user = req.session.user;
+	if (user === undefined){
+		res.redirect('/');
+	} else{
+		res.render('newpost')
+	}
+})
+
+
+
 //First POST: listens on '/register' and creates new user in database with information from form
 app.post('/register', function(req,res){
 	sequelize.sync({force: false}).then(function(){
