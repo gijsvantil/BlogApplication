@@ -1,4 +1,15 @@
 extends layoutloggedin
 
 block content
-	h1 HALLO DAAR BEN IK WEER
+	.container.register
+		div.row
+			div.col-sm-12
+				h2 New Post
+				form(role='form', action='newpost', method='post')
+					.form-group
+						label Title:
+						input#title.form-control(name = 'title')
+					.form-group
+						label Body:
+						textarea#body.form-control(name = 'body')
+						button.btn.btn-default(type='submit', value = 'login') Post

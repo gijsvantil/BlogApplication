@@ -131,6 +131,8 @@ app.post('/login', (req,res)=>{
 	})
 });
 
+
+
 // Log out GET
 app.get ('/logout', (req,res) => {
 	req.session.destroy(function(error){
