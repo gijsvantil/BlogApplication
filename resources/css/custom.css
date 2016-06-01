@@ -14,11 +14,11 @@ body{
 
 .container.register{
 	background-color:white;
-	margin-top:7%;
+	margin-top:5%;
 	border: 1px solid black;
 	border-radius:5px;
 	width:500px;
-	height:500px;
+	height:550px;
 	box-shadow: 10px 10px 5px #888888;
 }
 

@@ -46,7 +46,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 // Initialize session
 app.use(session({
-	secret: 'oh wow very secret much security',
+	secret: 'I solemnly swear that I am up to know good',
 	resave: true,
 	saveUninitialized: false
 }));
@@ -91,7 +91,7 @@ app.post('/register', function(req,res){
 });
 
 // Second POST: listens on /. Handles the login. Checks if username exists and if the password is correct.
-app.post('/login', function(req,res){
+app.post('/login', (req,res)=>{
 	// making sure user doesn't leave form empty
 	if (req.body.username.length === 0){
 		res.redirect('/?message=' + encodeURIComponent(("Please fill out your username.")));
@@ -116,6 +116,16 @@ app.post('/login', function(req,res){
 		}
 	}, function (error){
 		res.redirect('/?message=' + encodeURIComponent("Invalid username"));
+	})
+});
+
+// Log out GET
+app.get ('logout', function(req,res)=>{
+	request.session.destroy(function(error){
+		if (error) {
+			throw error
+		}
+		res.redirect('/?message=' + encodeURIComponent("Successfully logged out."));
 	})
 });
 
