@@ -25,18 +25,19 @@ var Blogpost = sequelize.define ('blogpost',{
 	body: Sequelize.STRING,
 })
 
-// relate user to many blogposts
-User.hasMany(Blogpost);
-Blogpost.belongsTo(User);
-
 // creating Comment model
 var Comment = sequelize.define ('comment',{
 	body: Sequelize.STRING
 })
 
-// relate blogpost to many comments
+// relate user to many blogposts
+User.hasMany(Blogpost);
+Blogpost.belongsTo(User);
+// relate user and blogpost  to many comments
 Blogpost.hasMany(Comment);
+User.hasMany(Comment);
 Comment.belongsTo(Blogpost);
+Comment.belongsTo(User);
 
 var app = express();
 // static folder
@@ -89,7 +90,7 @@ app.get('/newpost', (req,res)=>{
 
 
 //First POST: listens on '/register' and creates new user in database with information from form
-app.post('/register', function(req,res){
+app.post('/register', (req,res)=>{
 	sequelize.sync({force: false}).then(function(){
 		User.create({
 			username: req.body.username,
@@ -131,7 +132,19 @@ app.post('/login', (req,res)=>{
 	})
 });
 
-
+//Third POST: listens on '/newpost' and creates new blogpost
+app.post('/newpost', (req,res)=>{
+	User.findOne({
+		where: {
+			username: req.session.user.username
+		}
+	}).then(function(user){
+		user.createBlogpost({
+			title: req.body.title,
+			body:req.body.body
+		});
+	});
+});
 
 // Log out GET
 app.get ('/logout', (req,res) => {
