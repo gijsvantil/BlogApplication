@@ -4,7 +4,7 @@ body{
 
 .container.login{
 	background-color:white;
-	margin-top:10%;
+	margin-top:5%;
 	border: 1px solid black;
 	border-radius:5px;
 	width:500px;
@@ -14,7 +14,7 @@ body{
 
 .container.register{
 	background-color:white;
-	margin-top:5%;
+	margin-top:3%;
 	border: 1px solid black;
 	border-radius:5px;
 	width:500px;

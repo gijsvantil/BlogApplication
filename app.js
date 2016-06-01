@@ -70,7 +70,7 @@ app.get('/register', (req,res)=>{
 app.get('/allposts', (req,res)=>{
 	var user = req.session.user;
 	if (user === undefined){
-		res.redirect('/?message=' + encodeURIComponent("Please log in to view your profile."));
+		res.redirect('/');
 	} else {
 		res.render('posts')
 	}
@@ -110,7 +110,7 @@ app.post('/login', (req,res)=>{
 	}).then(function(user){
 		if (user !== null && req.body.password === user.password){
 		req.session.user = user;
-		res.redirect('allposts');
+		res.redirect('/posts');
 		} else {
 			res.redirect('/?message=' + encodeURIComponent("Invalid username or password."));
 		}
@@ -120,12 +120,12 @@ app.post('/login', (req,res)=>{
 });
 
 // Log out GET
-app.get ('logout', function(req,res)=>{
-	request.session.destroy(function(error){
+app.get ('/logout', (req,res) => {
+	req.session.destroy(function(error){
 		if (error) {
 			throw error
 		}
-		res.redirect('/?message=' + encodeURIComponent("Successfully logged out."));
+		res.render('logout');
 	})
 });
 
