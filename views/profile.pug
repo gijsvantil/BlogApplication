@@ -13,5 +13,9 @@ block content
 				p= sessionuser.email
 			div.col-sm-6
 				h3 Your posts:
+				each post in posts
+					p= post.title
+					p= post.body
+
 
 				

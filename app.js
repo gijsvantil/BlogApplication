@@ -76,6 +76,7 @@ app.get('/allposts', (req,res)=>{
 		Blogpost.findAll().then(function(blogposts){
 			var allblogpost = blogposts.map(function(blogpost){
 				return {
+					id: blogpost.dataValues.id,
 					title: blogpost.dataValues.title,
 					body: blogpost.dataValues.body
 				}	
@@ -94,6 +95,7 @@ app.get('/newpost', (req,res)=>{
 	if (user === undefined){
 		res.redirect('/');
 	} else{
+		console.log(req.session.user)
 		res.render('newpost',{
 			title: 'New Post'
 		})
@@ -106,10 +108,17 @@ app.get('/profile', (req,res)=>{
 	if (user === undefined){
 		res.redirect('/');
 	} else{
-		res.render('profile',{
-			title: 'Profile',
-			sessionuser: user
-		})
+		Blogpost.findAll({
+			where: {
+				userId:req.session.user.id
+			}
+		}).then(function(blogposts){
+			res.render('profile',{
+				posts: blogposts,
+				usertje: user,
+				sessionuser: user
+			});
+		});
 	}
 });
 
