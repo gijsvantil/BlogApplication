@@ -19,3 +19,7 @@ block content
 									= thing.id
 									p= thing.title
 									p= thing.body
+									form(role='form', action='comment', method='post')
+										.form-group
+											input#comment.form-control(name = 'comment')
+											button.btn.btn-default(type='comment', value = 'comment') Comment
