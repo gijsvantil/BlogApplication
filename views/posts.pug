@@ -6,6 +6,14 @@ block content
 		.row
 			.col-sm-12
 				h3 All blogposts:
+
+	.container.text-center.allposts
+		.row
+			.col-sm-12
 				each thing in allblogposts
-					p= thing.title
-					p= thing.body
+					.container.text-center.separateposts
+						.row
+							.col-sm-12
+						strong
+							p= thing.title
+						p= thing.body
