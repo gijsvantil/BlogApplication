@@ -1,4 +1,11 @@
 extends layoutloggedin
 
 block content
-	h1 HI
+	
+	.container.text-center
+		.row
+			.col-sm-12
+				h3 All blogposts:
+				each blogpost in allblogposts
+					p= allblogposts.title
+					p= allblogposts.body

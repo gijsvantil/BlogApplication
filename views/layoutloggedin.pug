@@ -1,7 +1,7 @@
 doctype html
 html
 	head
-		title Blog Application by G. van Til
+		title= title
 		// Stylesheets
 		link(rel='stylesheet' href='css/bootstrap.css')
 		link(rel='stylesheet' href='css/custom.css')
@@ -12,11 +12,11 @@ html
 					a.navbar-brand(href='/allposts') BLOG APPLICATION
 				ul.nav.navbar-nav
 					li
-						a(href='/newpost') NEW POSTS
+						a(href='/newpost') NEW POST
 					li
-						a(href='#') PROFILE
+						a(href='/profile') PROFILE
 					li
 						a(href='#') SEARCH
 					li
-						a(href='#') LOGOUT
+						a(href='/logout') LOGOUT
 		block content

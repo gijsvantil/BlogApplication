@@ -1,0 +1,17 @@
+extends layoutloggedin
+
+block content
+	.container.profile
+		div.row
+			div.col-sm-6
+				h3 Your profile:
+				strong Username:
+				p= sessionuser.username
+				strong Full name
+				p= sessionuser.firstname + " " + sessionuser.lastname
+				strong Email
+				p= sessionuser.email
+			div.col-sm-6
+				h3 Your posts:
+
+				

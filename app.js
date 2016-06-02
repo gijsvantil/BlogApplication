@@ -22,12 +22,12 @@ var User = sequelize.define('user', {
 // creating blogPost model
 var Blogpost = sequelize.define ('blogpost',{
 	title: Sequelize.STRING,
-	body: Sequelize.STRING,
+	body: Sequelize.TEXT
 })
 
 // creating Comment model
 var Comment = sequelize.define ('comment',{
-	body: Sequelize.STRING
+	body: Sequelize.TEXT
 })
 
 // relate user to many blogposts
@@ -73,9 +73,24 @@ app.get('/allposts', (req,res)=>{
 	if (user === undefined){
 		res.redirect('/');
 	} else {
-		res.render('posts')
+		Blogpost.findAll().then(function(blogposts){
+			var data = blogposts.map(function(blogpost){
+				res.render('posts', {
+					title: 'All posts',
+					allblogposts: blogpost.dataValues
+				})
+			})
+		});
 	}
 });
+
+// Post.findAll().then(function (posts) {
+// 	var data = posts.map(function (post) {
+// 		return {
+// 			title: post.dataValues.title,
+// 			body: post.dataValues.body
+// 		};
+// 	});
 
 // fourth GET: listens on 'newpost' and renders a page with a form to add a new page
 app.get('/newpost', (req,res)=>{
@@ -83,15 +98,27 @@ app.get('/newpost', (req,res)=>{
 	if (user === undefined){
 		res.redirect('/');
 	} else{
-		res.render('newpost')
+		res.render('newpost',{
+			title: 'New Post'
+		})
 	}
-})
+});
 
-
+// Fifth GET: listens on '/profile' and renders 'profile'
+app.get('/profile', (req,res)=>{
+	var user = req.session.user;
+	if (user === undefined){
+		res.redirect('/');
+	} else{
+		res.render('profile',{
+			title: 'Profile',
+			sessionuser: user
+		})
+	}
+});
 
 //First POST: listens on '/register' and creates new user in database with information from form
 app.post('/register', (req,res)=>{
-	sequelize.sync({force: false}).then(function(){
 		User.create({
 			username: req.body.username,
 			firstname: req.body.firstname,
@@ -99,7 +126,6 @@ app.post('/register', (req,res)=>{
 			email: req.body.email,
 			password: req.body.password
 		});
-	});
 	res.redirect('/')
 });
 
@@ -123,6 +149,7 @@ app.post('/login', (req,res)=>{
 	}).then(function(user){
 		if (user !== null && req.body.password === user.password){
 		req.session.user = user;
+		console.log(user.username)
 		res.redirect('/allposts');
 		} else {
 			res.redirect('/?message=' + encodeURIComponent("Invalid username or password."));
@@ -136,14 +163,15 @@ app.post('/login', (req,res)=>{
 app.post('/newpost', (req,res)=>{
 	User.findOne({
 		where: {
-			username: req.session.user.username
+			id: req.session.user.id
 		}
 	}).then(function(user){
 		user.createBlogpost({
-			title: req.body.title,
+			title:req.body.title,
 			body:req.body.body
 		});
 	});
+	res.redirect('/allposts')
 });
 
 // Log out GET
@@ -156,6 +184,9 @@ app.get ('/logout', (req,res) => {
 	})
 });
 
-var server = app.listen(3000, function (){
+sequelize.sync({force: false}).then(function () {
+	var server = app.listen(3000, function (){
 			console.log ('Blog Application listening on: ' + server.address().port)
+	});
 });
+
