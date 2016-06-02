@@ -74,23 +74,19 @@ app.get('/allposts', (req,res)=>{
 		res.redirect('/');
 	} else {
 		Blogpost.findAll().then(function(blogposts){
-			var data = blogposts.map(function(blogpost){
-				res.render('posts', {
-					title: 'All posts',
-					allblogposts: blogpost.dataValues
-				})
+			var allblogpost = blogposts.map(function(blogpost){
+				return {
+					title: blogpost.dataValues.title,
+					body: blogpost.dataValues.body
+				}	
 			})
-		});
+			res.render('posts', {
+				title: 'All posts',
+				allblogposts: allblogpost
+			})
+		})
 	}
 });
-
-// Post.findAll().then(function (posts) {
-// 	var data = posts.map(function (post) {
-// 		return {
-// 			title: post.dataValues.title,
-// 			body: post.dataValues.body
-// 		};
-// 	});
 
 // fourth GET: listens on 'newpost' and renders a page with a form to add a new page
 app.get('/newpost', (req,res)=>{
@@ -149,7 +145,6 @@ app.post('/login', (req,res)=>{
 	}).then(function(user){
 		if (user !== null && req.body.password === user.password){
 		req.session.user = user;
-		console.log(user.username)
 		res.redirect('/allposts');
 		} else {
 			res.redirect('/?message=' + encodeURIComponent("Invalid username or password."));
