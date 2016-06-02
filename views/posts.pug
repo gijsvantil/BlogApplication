@@ -10,16 +10,18 @@ block content
 	.container.text-center.allposts
 		.row
 			.col-sm-12
-				each thing in allblogposts
-					.container.text-center.separateposts
-						.row
-							.col-sm-12
+				each post in allblogposts
 								p 
 									strong Blogpost # 
-									= thing.id
-									p= thing.title
-									p= thing.body
+									= post.id
+									p #{post.title}
+									p= post.body
+									p= comment
 									form(role='form', action='comment', method='post')
 										.form-group
 											input#comment.form-control(name = 'comment')
+											input#blogpostid.form-control(type="text", name="postid", value=post.id)
 											button.btn.btn-default(type='comment', value = 'comment') Comment
+								.comments
+									h3 comments:
+

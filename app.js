@@ -2,7 +2,9 @@
 var Sequelize = require('sequelize');
 var express = require('express');
 var bodyParser = require('body-parser');
+var Promise = require('promise');
 var session = require('express-session');
+
 
 // Setting up a connection to database: blogapplication'
 var sequelize = new Sequelize ('blogapplication', 'pgadmin', 'pwdaccess',{
@@ -83,6 +85,7 @@ app.get('/allposts', (req,res)=>{
 			})
 			res.render('posts', {
 				title: 'All posts',
+				currentuser: user,
 				allblogposts: allblogpost
 			})
 		})
@@ -110,7 +113,7 @@ app.get('/profile', (req,res)=>{
 	} else{
 		Blogpost.findAll({
 			where: {
-				userId:req.session.user.id
+				userId:user.id
 			}
 		}).then(function(blogposts){
 			res.render('profile',{
@@ -177,6 +180,36 @@ app.post('/newpost', (req,res)=>{
 	});
 	res.redirect('/allposts')
 });
+
+//Fourth POST: listens on '/comment' and creates new comment
+app.post('/comment', (req,res)=>{
+	var user = req.session.user;
+	console.log(user)
+	Promise.all([
+		Comment.create({
+			body: req.body.comment
+		}),
+		User.findOne({
+			where: {
+				id: req.session.user.id
+			}
+		}),
+		Blogpost.findOne({
+			where:{
+				id: req.body.postid
+			}
+		}),
+		console.log(req.body.postid),
+		]).then(function(promiseResult){
+			promiseResult[0].setUser(promiseResult[1]);
+			promiseResult[0].setBlogpost(promiseResult[2])
+		}).then(function(){
+			res.redirect('/allposts')
+	})
+
+})
+
+// Promise.all(["string1", "string2". "string3"])
 
 // Log out GET
 app.get ('/logout', (req,res) => {
