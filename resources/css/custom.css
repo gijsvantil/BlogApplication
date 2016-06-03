@@ -39,8 +39,32 @@ content{
 }
 
 button{
-	margin-top: 5%;
+	margin-top: 1%;
 }
+
+.col-sm-6.profile{
+	width: 200px;
+	border:1px solid black;
+	border-radius: 5px;
+	box-shadow: 10px 10px 5px #888888;
+	padding-right: 20px;
+}
+
+.col-sm-6.posts{
+	margin-left:20px;
+}
+
+.col-sm-12.allposts{
+	border: 1px solid black;
+}
+
+.singlepost{
+	border:1px solid black;
+	border-radius: 5px;
+	margin-top: 20px;
+	box-shadow: 10px 10px 5px #888888;
+}
+
 
 .comments{
 	border-top:1px solid black;

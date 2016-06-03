@@ -1,0 +1,10 @@
+extends layoutloggedin
+
+block content
+	h1 Hello
+	p= post.title
+	p= post.body
+		.comments
+			h3 comments:
+			each thing in post.comments
+				p= thing.body

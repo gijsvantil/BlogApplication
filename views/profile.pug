@@ -3,7 +3,7 @@ extends layoutloggedin
 block content
 	.container.profile
 		div.row
-			div.col-sm-6
+			div.col-sm-6.profile
 				h3 Your profile:
 				strong Username:
 				p= sessionuser.username
@@ -11,11 +11,13 @@ block content
 				p= sessionuser.firstname + " " + sessionuser.lastname
 				strong Email
 				p= sessionuser.email
-			div.col-sm-6
+			div.col-sm-6.posts
 				h3 Your posts:
 				each post in posts
-					p= post.title
-					p= post.body
+					.singlepost
+						p= post.title
+						p= post.body
+					.singlepostcomment
 
 
 				
