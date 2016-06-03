@@ -15,7 +15,8 @@ block content
 				h3 Your posts:
 				each post in posts
 					.singlepost
-						p= post.title
+						strong
+							p= post.title
 						p= post.body
 					.singlepostcomment
 

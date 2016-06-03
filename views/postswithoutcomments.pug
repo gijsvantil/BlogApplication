@@ -11,6 +11,7 @@ block content
 		.row
 			.col-sm-12.allposts
 				each post in allblogposts
+					.singlepost
 								p 
 									strong Blogpost # 
 									= post.id
@@ -19,7 +20,3 @@ block content
 									form(role='form', action='comment', method='post')
 										.form-group
 											input#blogpostid.form-control(type="hidden", name="postid", value=post.id)
-								.comments
-									h3 comments:
-									each thing in post.comment
-										p= thing.body

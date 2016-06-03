@@ -11,6 +11,7 @@ block content
 		.row
 			.col-sm-12.allposts
 				each post in allblogposts
+					.singlepost
 								p 
 									strong
 										a(href='singlepost/' + post.id) Blogpost # 
@@ -26,5 +27,6 @@ block content
 								.comments
 									h3 comments:
 									each thing in post.comment
-										p= thing.body
+										p= thing.id
+											p= thing.body
 

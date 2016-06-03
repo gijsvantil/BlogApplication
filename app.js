@@ -185,7 +185,7 @@ app.post('/register', (req,res)=>{
 			email: req.body.email,
 			password: req.body.password
 		});
-	res.redirect('/')
+	res.redirect('/login')
 });
 
 // Second POST: listens on /. Handles the login. Checks if username exists and if the password is correct.
