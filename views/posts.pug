@@ -10,15 +10,17 @@ block content
 	.container.text-center.allposts
 		.row
 			.col-sm-12.allposts
+				p= user
 				each post in allblogposts
 					.singlepost
+								p= post.user.firstname
+									p posted the following:
 								p 
 									strong
 										a(href='singlepost/' + post.id) Blogpost # 
 										= post.id 
 									p #{post.title}
 									p= post.body
-									p= comment
 									form(role='form', action='comment', method='post')
 										.form-group
 											input#comment.form-control(name = 'comment')
@@ -26,7 +28,7 @@ block content
 											button.btn.btn-default(type='comment', value = 'comment') Comment
 								.comments
 									h3 comments:
+
 									each thing in post.comment
-										p= thing.id
 											p= thing.body
 

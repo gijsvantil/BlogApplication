@@ -1,5 +1,5 @@
 body{
-	background-color: F2F2F2;
+	color: F2F2F2;
 }
 
 content{
@@ -63,10 +63,4 @@ button{
 	border-radius: 5px;
 	margin-top: 20px;
 	box-shadow: 10px 10px 5px #888888;
-}
-
-
-.comments{
-	border-top:1px solid black;
-	border-radius: 5px;
 }

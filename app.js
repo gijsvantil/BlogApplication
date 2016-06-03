@@ -7,7 +7,7 @@ var session = require('express-session');
 
 
 // Setting up a connection to database: blogapplication'
-var sequelize = new Sequelize ('blogapplication', 'pgadmin', 'pwdaccess',{
+var sequelize = new Sequelize ('blogapplication', process.env.POSTGRES_USER, process.env.POSTGRES_PASSWORD,{
 	host: 'localhost',
 	dialect: 'postgres'
 });
@@ -85,25 +85,29 @@ app.get('/', (req,res)=>{
 // Second GET: listens on '/allposts' and renders a page with all blog posts and possibility to comment
 app.get('/allposts', (req,res)=>{
 	var user = req.session.user;
-	Blogpost.findAll({ include:[User, {model: Comment, include: [User] }] 
+	var user = req.session.user;
+	if (user === undefined){
+		res.redirect('/');
+	} else {
+		Blogpost.findAll({ include:[User, {model: Comment, include: [User] }] 
 	}).then(function(blogposts){
-			var allblogpost = blogposts.map(function(blogpost){
-				return {
-					id: blogpost.dataValues.id,
-					title: blogpost.dataValues.title,
-					body: blogpost.dataValues.body,
-					user: blogpost.dataValues.user,
-					comment: blogpost.dataValues.comments
-				}	
-				console.log(allblogpost)
-			})
-			res.render('posts', {
-				title: 'All posts',
-				currentuser: user, 
-				allblogposts: allblogpost
-			})
-				
+		var allblogpost = blogposts.map(function(blogpost){
+			return {
+				id: blogpost.dataValues.id,
+				title: blogpost.dataValues.title,
+				body: blogpost.dataValues.body,
+				user: blogpost.dataValues.user,
+				comment: blogpost.dataValues.comments
+			}	
 		})
+		res.render('posts', {
+			title: 'All posts',
+			currentuser: user, 
+			allblogposts: allblogpost
+		})
+
+	})
+}
 });
 
 // Third GET: listens on 'register' and renders 'register'
