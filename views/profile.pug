@@ -13,12 +13,16 @@ block content
 				p= sessionuser.email
 			div.col-sm-6.posts
 				h3 Your posts:
-				each post in posts
-					.singlepost
-						strong
-							p= post.title
-						p= post.body
-					.singlepostcomment
+				if posts == 0
+					h4 You haven't posted anything yet.
+					h4 Create your first post 
+						a(href='/newpost') here
+				else
+					each post in posts
+						.singlepost
+							strong
+								p= post.title
+							p= post.body
 
 
 				

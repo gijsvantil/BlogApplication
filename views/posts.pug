@@ -1,34 +1,34 @@
 extends layoutloggedin
 
 block content
-	
-	.container.text-center
-		.row
-			.col-sm-12
-				h3 All blogposts:
-
 	.container.text-center.allposts
 		.row
 			.col-sm-12.allposts
-				p= user
 				each post in allblogposts
 					.singlepost
-								p= post.user.firstname
-									p posted the following:
+								h4= post.user.firstname
+								p posted the following:
 								p 
 									strong
 										a(href='singlepost/' + post.id) Blogpost # 
-										= post.id 
+											= post.id 
 									p #{post.title}
 									p= post.body
+
+									strong
+										a(href='singlepost/' + post.id)
 									form(role='form', action='comment', method='post')
 										.form-group
 											input#comment.form-control(name = 'comment')
 											input#blogpostid.form-control(type="hidden", name="postid", value=post.id)
 											button.btn.btn-default(type='comment', value = 'comment') Comment
 								.comments
-									h3 comments:
-
-									each thing in post.comment
-											p= thing.body
+									if post.comment.length > 0
+										h3 comments:
+										each thing in post.comment
+												p= thing.user.username
+													|  commented:
+												p= thing.body
+									else
+										h3 no comments
 

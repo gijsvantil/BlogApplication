@@ -1,22 +1,22 @@
 extends layout
 
 block content
-	
-	.container.text-center
-		.row
-			.col-sm-12
-				h3 All blogposts:
 
 	.container.text-center.allposts
 		.row
 			.col-sm-12.allposts
 				each post in allblogposts
 					.singlepost
-								p 
-									strong Blogpost # 
-									= post.id
-									p #{post.title}
-									p= post.body
-									form(role='form', action='comment', method='post')
-										.form-group
-											input#blogpostid.form-control(type="hidden", name="postid", value=post.id)
+						h3= post.user.username
+							|  posted:
+						p
+							strong Blogpost # 
+								= post.id
+						.singlepostbody
+							p= post.title
+							p= post.body
+							form(role='form', action='comment', method='post')
+								.form-group
+								input#blogpostid.form-control(type="hidden", name="postid", value=post.id)
+								a(href='/login')
+									h4 Log in to read comments or leave a comment

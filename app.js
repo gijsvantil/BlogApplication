@@ -35,7 +35,7 @@ var Comment = sequelize.define ('comment',{
 // relate user to many blogposts
 User.hasMany(Blogpost);
 Blogpost.belongsTo(User);
-// relate user and blogpost  to many comments
+// relate user and blogpost to many comments
 Blogpost.hasMany(Comment);
 User.hasMany(Comment);
 Comment.belongsTo(Blogpost);
@@ -58,11 +58,18 @@ app.use(session({
 app.set('views', './views');
 app.set('view engine', 'pug');
 
-// First GET: listens on '/' and renders landing page
+//////////////////////
+// LANDING PAGE
+//////////////////////
+
+// GET: listens on '/' and renders landing page with posts without comments
 app.get('/', (req,res)=>{
+	// Storing session user in a variable
 	var user = req.session.user;
+	// Retrieve all blogposts from DB and include author. Also include all related comments with their authors
 	Blogpost.findAll({ include:[User, {model: Comment, include: [User] }] 
 	}).then(function(blogposts){
+			// Create new array with db data
 			var allblogpost = blogposts.map(function(blogpost){
 				return {
 					id: blogpost.dataValues.id,
@@ -71,7 +78,6 @@ app.get('/', (req,res)=>{
 					user: blogpost.dataValues.user,
 					comment: blogpost.dataValues.comments
 				}	
-				console.log(allblogpost)
 			})
 			res.render('postswithoutcomments', {
 				title: 'All posts',
@@ -82,105 +88,17 @@ app.get('/', (req,res)=>{
 		})
 });
 
-// Second GET: listens on '/allposts' and renders a page with all blog posts and possibility to comment
-app.get('/allposts', (req,res)=>{
-	var user = req.session.user;
-	var user = req.session.user;
-	if (user === undefined){
-		res.redirect('/');
-	} else {
-		Blogpost.findAll({ include:[User, {model: Comment, include: [User] }] 
-	}).then(function(blogposts){
-		var allblogpost = blogposts.map(function(blogpost){
-			return {
-				id: blogpost.dataValues.id,
-				title: blogpost.dataValues.title,
-				body: blogpost.dataValues.body,
-				user: blogpost.dataValues.user,
-				comment: blogpost.dataValues.comments
-			}	
-		})
-		res.render('posts', {
-			title: 'All posts',
-			currentuser: user, 
-			allblogposts: allblogpost
-		})
 
-	})
-}
-});
+////////////////////
+// REGISTER SECTION
+////////////////////
 
-// Third GET: listens on 'register' and renders 'register'
+// GET: listens on 'register' and renders 'register'
 app.get('/register', (req,res)=>{
 	res.render('register')
 });
 
-// Fourth GET: listens on '/' and renders 'index'
-// This renders the login page
-app.get('/login', (req,res)=>{
-	res.render('index')
-});
-
-
-// Fifth GET: listens on 'newpost' and renders a page with a form to add a new page
-app.get('/newpost', (req,res)=>{
-	var user = req.session.user;
-	if (user === undefined){
-		res.redirect('/');
-	} else{
-		console.log(req.session.user)
-		res.render('newpost',{
-			title: 'New Post'
-		})
-	}
-});
-
-// Sixth GET: listens on '/profile' and renders 'profile'
-app.get('/profile', (req,res)=>{
-	var user = req.session.user;
-	if (user === undefined){
-		res.redirect('/');
-	} else{
-		Blogpost.findAll({
-			where: {
-				userId:user.id
-			}
-		}).then(function(blogposts){
-			res.render('profile',{
-				posts: blogposts,
-				usertje: user,
-				sessionuser: user
-			});
-		});
-	}
-});
-
-// Seventh GET: listens on '/singlepost/:id' and renders a page with a specific post
-app.get('/singlepost/:id', (req,res)=>{
-	var requestParameters = req.params;
-	var user= req.session.user;
-	console.log(requestParameters);
-	if (user === undefined){
-		res.redirect('/');
-	} else {Blogpost.findOne({
-		where: {
-			id: req.params.id
-		},
-		include: [
-		{model: Comment, include:[
-			{model: User}
-			]}
-			]
-		}).then(function(post){
-			res.render('onepost',{
-				title: "Single post",
-				post:post
-			})
-		})
-	}
-})
-
-//First POST: listens on '/register' and creates new user in database with information from form
+//POST: listens on '/register' and creates new user in database with information from form
 app.post('/register', (req,res)=>{
 		User.create({
 			username: req.body.username,
@@ -192,7 +110,17 @@ app.post('/register', (req,res)=>{
 	res.redirect('/login')
 });
 
-// Second POST: listens on /. Handles the login. Checks if username exists and if the password is correct.
+///////////////////
+// LOGIN SECTION
+///////////////////
+
+// GET: listens on '/' and renders 'index'
+// This renders the login page
+app.get('/login', (req,res)=>{
+	res.render('index')
+});
+
+//POST: listens on /. Handles the login. Checks if username exists and if the password is correct.
 app.post('/login', (req,res)=>{
 	// making sure user doesn't leave form empty
 	if (req.body.username.length === 0){
@@ -221,25 +149,44 @@ app.post('/login', (req,res)=>{
 	})
 });
 
-//Third POST: listens on '/newpost' and creates new blogpost
-app.post('/newpost', (req,res)=>{
-	User.findOne({
-		where: {
-			id: req.session.user.id
-		}
-	}).then(function(user){
-		user.createBlogpost({
-			title:req.body.title,
-			body:req.body.body
-		});
-	});
-	res.redirect('/allposts')
+
+///////////////////
+// ALL BLOGPOSTS
+///////////////////
+
+// GET: listens on '/allposts' and renders a page with all blog posts with comments and possibility to comment
+app.get('/allposts', (req,res)=>{
+	var user = req.session.user;
+	// Making page available solely for loggedin users
+	if (user === undefined){
+		res.redirect('/');
+	} else {
+		Blogpost.findAll({ include:[User, {model: Comment, include: [User] }] 
+	}).then(function(blogposts){
+		var allblogpost = blogposts.map(function(blogpost){
+			return {
+				id: blogpost.dataValues.id,
+				title: blogpost.dataValues.title,
+				body: blogpost.dataValues.body,
+				user: blogpost.dataValues.user,
+				comment: blogpost.dataValues.comments
+			}	
+		})
+		res.render('posts', {
+			title: 'All posts',
+			currentuser: user, 
+			allblogposts: allblogpost
+		})
+
+	})
+}
 });
 
-//Fourth POST: listens on '/comment' and creates new comment
+//POST: listens on '/comment' and creates new comment
 app.post('/comment', (req,res)=>{
 	var user = req.session.user;
 	console.log(user)
+	// Promise.all means 'Do everything in this array before continueing to the then'
 	Promise.all([
 		Comment.create({
 			body: req.body.comment
@@ -263,6 +210,97 @@ app.post('/comment', (req,res)=>{
 	})
 
 })
+
+////////////
+//NEW POST
+////////////
+
+// GET: listens on 'newpost' and renders a page with a form to add a new page
+app.get('/newpost', (req,res)=>{
+	var user = req.session.user;
+	if (user === undefined){
+		res.redirect('/');
+	} else{
+		console.log(req.session.user)
+		res.render('newpost',{
+			title: 'New Post'
+		})
+	}
+});
+
+//POST: listens on '/newpost' and creates new blogpost
+app.post('/newpost', (req,res)=>{
+	User.findOne({
+		where: {
+			id: req.session.user.id
+		}
+	}).then(function(user){
+		user.createBlogpost({
+			title:req.body.title,
+			body:req.body.body
+		});
+	});
+	res.redirect('/allposts')
+});
+
+
+////////////////
+// PROFILE PAGE
+////////////////
+
+// GET: listens on '/profile' and renders 'profile'
+app.get('/profile', (req,res)=>{
+	var user = req.session.user;
+	if (user === undefined){
+		res.redirect('/');
+	} else{
+		Blogpost.findAll({
+			where: {
+				userId:user.id
+			}
+		}).then(function(blogposts){
+			res.render('profile',{
+				posts: blogposts,
+				usertje: user,
+				sessionuser: user
+			});
+		});
+	}
+});
+
+
+///////////////////
+//SINGLE POST
+///////////////////
+
+// Seventh GET: listens on '/singlepost/:id' and renders a page with a specific post
+app.get('/singlepost/:id', (req,res)=>{
+	var requestParameters = req.params;
+	var user= req.session.user;
+	if (user === undefined){
+		res.redirect('/');
+	} else {Blogpost.findOne({
+		where: {
+			id: req.params.id
+		},
+		include: [
+		{model: Comment, include:[
+			{model: User}
+			]}
+			]
+		}).then(function(post){
+			console.log(post)
+			res.render('onepost',{
+				title: "Single post",
+				post:post
+			})
+		});
+	};
+});
+
+/////////////
+// LOG OUT
+/////////////
 
 // Log out GET
 app.get ('/logout', (req,res) => {
