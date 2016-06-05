@@ -1,0 +1,111 @@
+﻿TABLES
+1.USERS
+ID
+	USERNAME
+	FIRST NAME
+	LAST NAME
+	EMAIL
+	TIMESTAMP
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+2.POSTS 
+ID
+	TITLE
+	BODY
+	USERID
+	TIMESTAMP
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+3.COMMENTS
+ID
+	COMMENT
+	USER ID
+	POSTID
+	TIMESTAMP
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+GAMEPLAN
+1. SET UP
+   1. Github
+   2. NPM init
+   3. .gitignore
+   4. Basic local folder structure (app.js/views/resources(css and js)/custom.css/custom.js/cookies.js)
+   5. Bootstrap
+   6. What to do with the database
+   7. Ready to go check?
+1. LOGIN page
+   1. See session sample app and recreate
+   2. no account? → REGISTER PAGE
+1. ALL BLOGPOSTS PAGE
+   1. Title of every page needs to be clickable that renders a new page with just that post and all comments
+   2. below ever blogpost there needs to be a link that says ‘leave a comment’
+1. PROFILE PAGE
+   1. user information
+   2. all your posts
+1. LOG OUT
