@@ -5,6 +5,15 @@ var bodyParser = require('body-parser');
 var Promise = require('promise');
 var session = require('express-session');
 
+// requiring bcrypt
+var bcrypt = require('bcrypt')
+
+var hash = function(password){
+	bcrypt.hash(password, 10, function(err, hash) {
+    // Store hash in your password DB.
+});
+}
+
 
 // Setting up a connection to database: blogapplication'
 var sequelize = new Sequelize ('blogapplication', process.env.POSTGRES_USER, process.env.POSTGRES_PASSWORD,{
@@ -100,13 +109,20 @@ app.get('/register', (req,res)=>{
 
 //POST: listens on '/register' and creates new user in database with information from form
 app.post('/register', (req,res)=>{
-		User.create({
-			username: req.body.username,
-			firstname: req.body.firstname,
-			lastname: req.body.lastname,
-			email: req.body.email,
-			password: req.body.password
-		});
+	bcrypt.hash(req.body.password, 10, function(err, hash) {
+			if (err){
+				return err
+			} else {
+				console.log ("this is the hash: " + hash)
+				User.create({
+					username: req.body.username,
+					firstname: req.body.firstname,
+					lastname: req.body.lastname,
+					email: req.body.email,
+					password: hash
+				})
+			}
+		})
 	res.redirect('/login')
 });
 
@@ -138,10 +154,12 @@ app.post('/login', (req,res)=>{
 		}
 	// Check if password corresponds with password in database
 	}).then(function(user){
-		if (user !== null && req.body.password === user.password){
-		req.session.user = user;
-		res.redirect('/allposts');
-		} else {
+		bcrypt.compare(req.body.password, user.password, function (err, response){
+			if (user !== null && response == true){
+				req.session.user = user;
+				res.redirect ('/allposts')
+				}
+		})else {
 			res.redirect('/?message=' + encodeURIComponent("Invalid username or password."));
 		}
 	}, function (error){
@@ -149,6 +167,25 @@ app.post('/login', (req,res)=>{
 	})
 });
 
+
+
+// (bcrypt.compareSync(req.body.password, user.password) == true)
+
+// if (user !== null && bcrypt.compare(req.body.password, user.password, function (err, response){
+// 		console.log(response)
+// })) {
+// 	req.session.user = user;
+// 	res.redirect('/allposts');
+// }
+
+// bcrypt.compare(req.body.password, user.password, function (err, response){
+// 	if (user !== null && response == true){
+// 		req.session.user = user;
+// 		res.redirect ('/allposts')
+// 	}
+// })
+
+// (bcrypt.compareSync(req.body.password, user.password) == true)
 
 ///////////////////
 // ALL BLOGPOSTS
